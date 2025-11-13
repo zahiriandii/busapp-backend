@@ -1,11 +1,21 @@
 package com.andi.busapp.entity;
 
 import com.andi.busapp.entity.enums.BookingStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking
 {
     @Id
@@ -21,4 +31,8 @@ public class Booking
     
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
+
+    @OneToMany(mappedBy = "booking",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Passenger> passengers;
 }
