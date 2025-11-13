@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Date;
-
+@Entity
+@Table(name = "user-table")
 public class User
 {
-
+    @Id
     private int Id;
     private String FirstName;
     private String LastName;
