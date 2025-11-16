@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,6 +24,7 @@ public class Trip
     private City cityFrom;
     @ManyToOne
     private City cityTo;
+    private LocalDate departureDate;
 
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
