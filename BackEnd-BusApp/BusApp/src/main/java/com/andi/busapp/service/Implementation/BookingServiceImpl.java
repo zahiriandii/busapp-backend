@@ -7,6 +7,7 @@ import com.andi.busapp.entity.Passenger;
 import com.andi.busapp.entity.Trip;
 import com.andi.busapp.entity.enums.BookingStatus;
 import com.andi.busapp.entity.enums.PassengerType;
+import com.andi.busapp.exceptions.TripNotFoundException;
 import com.andi.busapp.repository.BookingRepository;
 import com.andi.busapp.repository.TripRepository;
 import com.andi.busapp.service.BookingService;
@@ -55,7 +56,7 @@ public class BookingServiceImpl implements BookingService
 
         Trip trip = tripRepository
                 .findById(request.tripId())
-                .orElseThrow(()-> new RuntimeException("Trip not found"));
+                .orElseThrow(()-> new TripNotFoundException(request.tripId()));
 
         Booking booking = new Booking();
         booking.setTrip(trip);
