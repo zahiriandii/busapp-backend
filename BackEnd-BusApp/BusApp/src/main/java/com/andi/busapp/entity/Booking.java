@@ -25,8 +25,11 @@ public class Booking
     @ManyToOne
     private Trip trip;
 
-    @ManyToOne
-    private User user;
+//    @ManyToOne
+//    private User user;
+    private String firstName;
+    private String lastName;
+    private String contactEmail;
     private LocalDateTime dateCreated;
     
     @Enumerated(EnumType.STRING)
