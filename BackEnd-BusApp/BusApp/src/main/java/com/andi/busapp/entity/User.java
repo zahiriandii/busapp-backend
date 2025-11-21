@@ -20,7 +20,9 @@ public class User
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
 
     @Column(unique = true, nullable = false)
@@ -29,9 +31,13 @@ public class User
     @Column(nullable = false)
     private String passwordHash;
 
+    @Column(nullable = false)
     private LocalDate birthDate;
+    @Column(nullable = false)
     private String gender;
+    @Column(nullable = false)
     private String phoneNumber;
+    @Column(nullable = false)
     private String country;
 
     @Enumerated(EnumType.STRING)
