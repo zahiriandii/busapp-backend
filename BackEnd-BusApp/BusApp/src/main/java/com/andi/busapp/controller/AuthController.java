@@ -4,6 +4,7 @@ import com.andi.busapp.dto.logInDTO.AuthResponse;
 import com.andi.busapp.dto.logInDTO.LoginRequest;
 import com.andi.busapp.dto.logInDTO.RegisterRequest;
 import com.andi.busapp.service.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +24,7 @@ public class AuthController
     }
 
     @PostMapping("/register")
-    public AuthResponse register (@RequestBody RegisterRequest registerRequest)
+    public AuthResponse register (@Valid @RequestBody RegisterRequest registerRequest)
     {
         return this.authenticationService.register(registerRequest);
     }

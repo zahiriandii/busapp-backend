@@ -4,6 +4,7 @@ public record AuthResponse(
         Long userId,
         String email,
         String firstName,
-        String lastName
+        String lastName,
+        String token
         // later: token, roles, etc.
 ) {}
