@@ -18,7 +18,7 @@ public class Trip
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     private City cityFrom;
@@ -29,5 +29,7 @@ public class Trip
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private Long price;
-    private int totalSeats;
+
+    @ManyToOne
+    private Bus bus;
 }

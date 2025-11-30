@@ -16,16 +16,18 @@ public class Passenger
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    private String FirstName;
-    private String LastName;
+    private String firstName;
+    private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "booking_Id", nullable = false)
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
     @Enumerated(EnumType.STRING)
-    private PassengerType PassengerType;
-    private String SeatNumber;
+    private PassengerType passengerType;
+
+    // This is optional, but it's fine to keep for easy display
+    private String seatNumber;
 }
