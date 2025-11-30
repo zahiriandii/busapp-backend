@@ -8,7 +8,6 @@ public record TripDTO(
         String cityTo,
         LocalDateTime departureTime,
         LocalDateTime arrivalTime,
-        int seats,
         Long price
 )
 {}
