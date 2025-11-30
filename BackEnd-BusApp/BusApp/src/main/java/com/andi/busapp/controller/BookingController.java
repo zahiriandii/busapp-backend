@@ -6,7 +6,7 @@ import com.andi.busapp.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("/api/bookings")
 public class BookingController
 {
     private final BookingService bookingService;
@@ -15,7 +15,7 @@ public class BookingController
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public BookingResponseDTO createBooking (@RequestBody CreateBookingRequest createBookingRequest)
     {
         return this.bookingService.createBooking(createBookingRequest);

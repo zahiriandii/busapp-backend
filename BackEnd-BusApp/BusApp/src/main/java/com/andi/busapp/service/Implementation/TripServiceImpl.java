@@ -57,14 +57,14 @@ public class TripServiceImpl implements TripService
     }
 
     private TripDTO toTripDTO(Trip trip) {
-        int availableSeats = trip.getTotalSeats();
+        int totalSeats = trip.getBus().getSeats().size();
         return new TripDTO(
           trip.getId(),
           trip.getCityFrom().getName(),
           trip.getCityTo().getName(),
           trip.getDepartureTime(),
           trip.getArrivalTime(),
-          trip.getTotalSeats(),
+          totalSeats,
           trip.getPrice()
         );
     }
