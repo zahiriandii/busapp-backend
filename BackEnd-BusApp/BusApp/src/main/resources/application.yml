@@ -24,6 +24,19 @@ spring:
     enabled: false
     locations: classpath:db/migration
 
+  mail:
+    host: sandbox.smtp.mailtrap.io     # e.g. smtp.gmail.com or smtp.mailtrap.io
+    port: 2525
+    username: dfdebff133056c      # TODO: replace
+    password: ddd95c14ba98bc      # TODO: replace
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
 logging:
   level:
     org.springframework: INFO
@@ -32,7 +45,9 @@ logging:
 
 app:
   jwt:
-    secret: "change-this-secret-key-123"
+    secret: "b4f7Kp29!aZxqP9#rLs9203Xs9@F1pQnvL0uA2e8GxC9dT7U"
+  mail:
+    from: "no-reply@bus-ticket-app.com"   # address used as sender in booking emails
 
 ---
 
@@ -58,6 +73,25 @@ spring:
   flyway:
     enabled: true
 
+  mail:
+    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
+    port: ${MAIL_PORT:2525}
+    username: ${MAIL_USERNAME:dfdebff133056c}
+    password: ${MAIL_PASSWORD:ddd95c14ba98bc}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
 logging:
   level:
     org.springframework: WARN
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:b4f7Kp29!aZxqP9#rLs9203Xs9@F1pQnvL0uA2e8GxC9dT7U}
+  mail:
+    from: ${MAIL_FROM:no-reply@bus-ticket-app.com}
