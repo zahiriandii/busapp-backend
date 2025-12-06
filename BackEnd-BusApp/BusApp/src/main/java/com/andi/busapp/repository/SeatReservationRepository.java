@@ -4,6 +4,7 @@ import com.andi.busapp.dto.SeatStatus.SeatStatusDTO;
 import com.andi.busapp.entity.Seat;
 import com.andi.busapp.entity.SeatReservation;
 import com.andi.busapp.entity.Trip;
+import com.andi.busapp.entity.enums.SeatStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +37,5 @@ public interface SeatReservationRepository extends JpaRepository<SeatReservation
 
     List<SeatReservation> findByTripAndSeatIn(Trip trip, List<Seat> seats);
 
+    long countByTripAndStatus(Trip trip, SeatStatus status);
 }

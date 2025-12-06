@@ -2,6 +2,8 @@ package com.andi.busapp.service.Implementation;
 
 import com.andi.busapp.dto.TripDTO;
 import com.andi.busapp.entity.Trip;
+import com.andi.busapp.entity.enums.SeatStatus;
+import com.andi.busapp.repository.SeatReservationRepository;
 import com.andi.busapp.repository.TripRepository;
 import com.andi.busapp.service.TripService;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,10 @@ import java.util.stream.Collectors;
 public class TripServiceImpl implements TripService
 {
     private final TripRepository tripRepository;
-
-    public TripServiceImpl(TripRepository tripRepository) {
+    private final SeatReservationRepository seatReservationRepository;
+    public TripServiceImpl(TripRepository tripRepository, SeatReservationRepository seatReservationRepository) {
         this.tripRepository = tripRepository;
+        this.seatReservationRepository = seatReservationRepository;
     }
 
 
@@ -58,13 +61,15 @@ public class TripServiceImpl implements TripService
 
     private TripDTO toTripDTO(Trip trip) {
         int totalSeats = trip.getBus().getSeats().size();
+        long reservedSeats = this.seatReservationRepository.countByTripAndStatus(trip, SeatStatus.RESERVED);
+        int availableSeats = (int) (totalSeats - reservedSeats);
         return new TripDTO(
           trip.getId(),
           trip.getCityFrom().getName(),
           trip.getCityTo().getName(),
           trip.getDepartureTime(),
           trip.getArrivalTime(),
-          totalSeats,
+          availableSeats,
           trip.getPrice()
         );
     }
