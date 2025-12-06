@@ -1,5 +1,6 @@
 package com.andi.busapp.service.Implementation;
 
+import com.andi.busapp.dto.BookingCreationEvent;
 import com.andi.busapp.dto.RequestDTO.CreateBookingRequest;
 import com.andi.busapp.dto.RequestDTO.PassengerRequest;
 import com.andi.busapp.dto.ResponseDTO.BookingResponseDTO;
@@ -15,6 +16,9 @@ import com.andi.busapp.repository.SeatReservationRepository;
 import com.andi.busapp.repository.TripRepository;
 import com.andi.busapp.service.BookingService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class BookingServiceImpl implements BookingService
 {
@@ -30,12 +35,16 @@ public class BookingServiceImpl implements BookingService
     private final TripRepository tripRepository;
     private final SeatRepository seatRepository;
     private final SeatReservationRepository seatReservationRepository;
+    private final BookingEmailServiceImpl bookingEmailService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public BookingServiceImpl(BookingRepository bookingRepository, TripRepository tripRepository, SeatRepository seatRepository, SeatReservationRepository seatReservationRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, TripRepository tripRepository, SeatRepository seatRepository, SeatReservationRepository seatReservationRepository, BookingEmailServiceImpl bookingEmailService, ApplicationEventPublisher eventPublisher) {
         this.bookingRepository = bookingRepository;
         this.tripRepository = tripRepository;
         this.seatRepository = seatRepository;
         this.seatReservationRepository = seatReservationRepository;
+        this.bookingEmailService = bookingEmailService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -155,6 +164,7 @@ public class BookingServiceImpl implements BookingService
 
         seatReservationRepository.saveAll(reservations);
 
+        eventPublisher.publishEvent(new BookingCreationEvent(savedBooking));
         // 10. Return response
         return new BookingResponseDTO(
                 savedBooking.getId(),

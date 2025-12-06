@@ -1,6 +1,7 @@
 package com.andi.busapp.repository;
 
 import com.andi.busapp.dto.SeatStatus.SeatStatusDTO;
+import com.andi.busapp.entity.Booking;
 import com.andi.busapp.entity.Seat;
 import com.andi.busapp.entity.SeatReservation;
 import com.andi.busapp.entity.Trip;
@@ -38,4 +39,6 @@ public interface SeatReservationRepository extends JpaRepository<SeatReservation
     List<SeatReservation> findByTripAndSeatIn(Trip trip, List<Seat> seats);
 
     long countByTripAndStatus(Trip trip, SeatStatus status);
+
+    List<SeatReservation> findByBooking(Booking booking);
 }
