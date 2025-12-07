@@ -49,6 +49,8 @@ app:
   mail:
     from: "no-reply@bus-ticket-app.com"   # address used as sender in booking emails
 
+stripe:
+  secret-key: "sk_test_placeholder"
 ---
 
 spring:
@@ -95,3 +97,6 @@ app:
     secret: ${JWT_SECRET:b4f7Kp29!aZxqP9#rLs9203Xs9@F1pQnvL0uA2e8GxC9dT7U}
   mail:
     from: ${MAIL_FROM:no-reply@bus-ticket-app.com}
+
+stripe:
+  secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}

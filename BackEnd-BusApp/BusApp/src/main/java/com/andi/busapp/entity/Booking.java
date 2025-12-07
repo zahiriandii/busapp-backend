@@ -35,6 +35,9 @@ public class Booking
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
+
+    private String paymentIntentId;
+
     @OneToMany(mappedBy = "booking",cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Passenger> passengers;
