@@ -7,6 +7,7 @@ public record CreateBookingRequest(
     String firstName,
     String lastName,
     String contactEmail,
+    String paymentIntentId,
     List<PassengerRequest> passengers
 )
 {}

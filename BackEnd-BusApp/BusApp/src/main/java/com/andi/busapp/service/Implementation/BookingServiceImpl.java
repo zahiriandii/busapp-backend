@@ -15,6 +15,8 @@ import com.andi.busapp.repository.SeatRepository;
 import com.andi.busapp.repository.SeatReservationRepository;
 import com.andi.busapp.repository.TripRepository;
 import com.andi.busapp.service.BookingService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -106,12 +108,22 @@ public class BookingServiceImpl implements BookingService
             throw new SeatAlreadyReservedException("One or more seats are already reserved");
         }
 
+        try {
+            PaymentIntent intent = PaymentIntent.retrieve(request.paymentIntentId());
+            if (!"succeeded".equals(intent.getStatus())) {
+                throw new RuntimeException("Payment not completed");
+            }
+        } catch (StripeException e) {
+            throw new RuntimeException(e);
+        }
+
         // 6. Create Booking
         Booking booking = new Booking();
         booking.setTrip(trip);
         booking.setFirstName(request.firstName());
         booking.setLastName(request.lastName());
         booking.setContactEmail(request.contactEmail());
+        booking.setPaymentIntentId(request.paymentIntentId());
         booking.setDateCreated(LocalDateTime.now());
         booking.setStatus(BookingStatus.RESERVED);
 
