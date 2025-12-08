@@ -50,7 +50,7 @@ app:
     from: "no-reply@bus-ticket-app.com"   # address used as sender in booking emails
 
 stripe:
-  secret-key: "sk_test_placeholder"
+  secret-key: "sk_dummy_test_key"
 ---
 
 spring:
@@ -99,4 +99,4 @@ app:
     from: ${MAIL_FROM:no-reply@bus-ticket-app.com}
 
 stripe:
-  secret-key: ${STRIPE_SECRET_KEY:sk_test_placeholder}
+  secret-key: ${STRIPE_SECRET_KEY:sk_dummy_test_key}
