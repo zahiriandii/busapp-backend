@@ -6,6 +6,7 @@ import java.util.List;
 
 public record PaymentIntentRequestDTO(
         Long tripId,
-        List<PassengerRequest> passengers
+        List<PassengerRequest> passengers,
+        String paymentMethodId
 )
 {}
