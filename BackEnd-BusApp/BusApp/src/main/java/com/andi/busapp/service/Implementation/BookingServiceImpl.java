@@ -1,6 +1,8 @@
 package com.andi.busapp.service.Implementation;
 
+import com.andi.busapp.dto.AdminBookingDTO.PassengerDTO;
 import com.andi.busapp.dto.BookingCreationEvent;
+import com.andi.busapp.dto.BookingTicketInfo;
 import com.andi.busapp.dto.RequestDTO.CreateBookingRequest;
 import com.andi.busapp.dto.RequestDTO.PassengerRequest;
 import com.andi.busapp.dto.ResponseDTO.BookingResponseDTO;
@@ -60,8 +62,26 @@ public class BookingServiceImpl implements BookingService
     }
 
     @Override
-    public Booking findById(Long id) {
-        return this.bookingRepository.findById(id).orElse(null);
+    public BookingTicketInfo findById(Long id) {
+        Booking booking = this.bookingRepository.findById(id).orElse(null);
+        List<PassengerDTO> passengerDtos = booking.getPassengers() == null
+                ? List.of()
+                : booking.getPassengers()
+                .stream()
+                .map(this::toPassengerDto)
+                .toList();
+
+        return new BookingTicketInfo(
+            booking.getId(),
+            booking.getTrip().getId(),
+            booking.getFirstName(),
+            booking.getLastName(),
+            booking.getContactEmail(),
+            booking.getStatus(),
+            booking.getDateCreated(),
+            passengerDtos
+        );
+
     }
 
     @Override
@@ -185,6 +205,15 @@ public class BookingServiceImpl implements BookingService
                 savedBooking.getLastName(),
                 savedBooking.getContactEmail(),
                 savedBooking.getStatus()
+        );
+    }
+    private PassengerDTO toPassengerDto(Passenger p) {
+        return new PassengerDTO(
+                p.getId(),
+                p.getFirstName(),
+                p.getLastName(),
+                p.getPassengerType(),
+                p.getSeatNumber()
         );
     }
 }

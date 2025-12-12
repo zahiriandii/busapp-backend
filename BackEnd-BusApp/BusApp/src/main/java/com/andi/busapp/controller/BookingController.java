@@ -1,5 +1,6 @@
 package com.andi.busapp.controller;
 
+import com.andi.busapp.dto.BookingTicketInfo;
 import com.andi.busapp.dto.RequestDTO.CreateBookingRequest;
 import com.andi.busapp.dto.ResponseDTO.BookingResponseDTO;
 import com.andi.busapp.service.BookingService;
@@ -20,5 +21,12 @@ public class BookingController
     {
         return this.bookingService.createBooking(createBookingRequest);
     }
+
+    @GetMapping("/{id}")
+    public BookingTicketInfo findBooking (@PathVariable Long id)
+    {
+        return this.bookingService.findById(id);
+    }
+
 
 }
