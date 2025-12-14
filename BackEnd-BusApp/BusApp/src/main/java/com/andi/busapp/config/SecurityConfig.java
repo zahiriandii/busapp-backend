@@ -36,7 +36,13 @@ public class SecurityConfig
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/trips/search").permitAll()
+                        .requestMatchers(
+                                "/health",
+                                "/actuator/health",
+                                "/actuator/health/**",
+                                "/auth/**",
+                                "/trips/search"
+                        ).permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
                         .anyRequest().authenticated()
                 )

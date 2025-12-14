@@ -17,14 +17,22 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class JwtAuthFilter extends OncePerRequestFilter
-{
+public class JwtAuthFilter extends OncePerRequestFilter {
+
     private final JWTservice jwtService;
     private final UserRepository userRepository;
 
     public JwtAuthFilter(JWTservice jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.equals("/health")
+                || path.equals("/actuator/health")
+                || path.startsWith("/auth/");
     }
 
     @Override
@@ -42,27 +50,33 @@ public class JwtAuthFilter extends OncePerRequestFilter
 
         String token = header.substring(7);
 
-        if (!jwtService.isTokenValid(token)) {
-            filterChain.doFilter(request, response);
-            return;
+        try {
+            if (!jwtService.isTokenValid(token)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String email = jwtService.extractEmail(token);
+
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            SimpleGrantedAuthority authority =
+                    new SimpleGrantedAuthority("ROLE_" + user.getUserType().name());
+
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                            email, null, List.of(authority));
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+        } catch (Exception e) {
+            // IMPORTANT: never break requests (including health checks)
+            // Just proceed without authentication.
         }
-
-        String email = jwtService.extractEmail(token);
-
-        User user = userRepository.findByEmail(email).orElse(null);
-        if (user == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority("ROLE_" + user.getUserType().name());
-
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(
-                        email, null, List.of(authority));
-
-        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
     }

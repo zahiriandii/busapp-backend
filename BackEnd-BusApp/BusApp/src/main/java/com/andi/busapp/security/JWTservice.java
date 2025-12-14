@@ -17,7 +17,7 @@ public class JWTservice
 {
     private final Algorithm algorithm;
 
-    public JWTservice(@Value("${app.jwt.secret}") String secret) {
+    public JWTservice(@Value("${security.app.jwt.secret}") String secret) {
         this.algorithm = Algorithm.HMAC256(secret);
     }
 

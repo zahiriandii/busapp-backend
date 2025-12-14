@@ -5,98 +5,65 @@ spring:
   application:
     name: bus-ticket-app
 
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/busapp-db
-    username: postgres
-    password: 12345678
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:busapp-db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:12345678}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true
 
   flyway:
     enabled: false
-    locations: classpath:db/migration
-
-  mail:
-    host: sandbox.smtp.mailtrap.io     # e.g. smtp.gmail.com or smtp.mailtrap.io
-    port: 2525
-    username: dfdebff133056c      # TODO: replace
-    password: ddd95c14ba98bc      # TODO: replace
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    default-encoding: UTF-8
-
-logging:
-  level:
-    org.springframework: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
-
-app:
-  jwt:
-    secret: "b4f7Kp29!aZxqP9#rLs9203Xs9@F1pQnvL0uA2e8GxC9dT7U"
-  mail:
-    from: "no-reply@bus-ticket-app.com"   # address used as sender in booking emails
-
-stripe:
-  secret-key: "sk_dummy_test_key"
----
-
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-  datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bus_ticket_app}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:password}
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: false
-
-  flyway:
-    enabled: true
 
   mail:
     host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
     port: ${MAIL_PORT:2525}
-    username: ${MAIL_USERNAME:dfdebff133056c}
-    password: ${MAIL_PASSWORD:ddd95c14ba98bc}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    default-encoding: UTF-8
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-    default-encoding: UTF-8
 
-logging:
-  level:
-    org.springframework: WARN
+security:
+  app:
+    jwt:
+      secret: ${JWT_SECRET}
+      expiration: 86400000
+
+stripe:
+  secret-key: ${STRIPE_SECRET_KEY}
 
 app:
-  jwt:
-    secret: ${JWT_SECRET:b4f7Kp29!aZxqP9#rLs9203Xs9@F1pQnvL0uA2e8GxC9dT7U}
   mail:
     from: ${MAIL_FROM:no-reply@bus-ticket-app.com}
 
-stripe:
-  secret-key: ${STRIPE_SECRET_KEY:sk_dummy_test_key}
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
